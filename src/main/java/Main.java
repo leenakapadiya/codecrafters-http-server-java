@@ -23,8 +23,13 @@ public class Main {
        while(line != null && !line.isEmpty()) {
            if(line.startsWith("GET")) {
                String path = line.split(" ")[1];
-               if(path.equals(("/"))) {
+               if (path.equals(("/"))) {
                    clientSocket.getOutputStream().write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+               } else if(path.startsWith(("/echo"))) {
+                   String temp = path.substring("/echo/".length());
+                   clientSocket.getOutputStream().write(String.format(
+                           "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s",
+                           temp.length(), temp).getBytes());
                } else {
                      clientSocket.getOutputStream().write("HTTP/1.1 404 Not Found\r\n\r\n".getBytes());
                }
